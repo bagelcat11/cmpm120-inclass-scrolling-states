@@ -66,6 +66,17 @@ class Load extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('hero', { start: 28, end: 31 }),
         })
 
+        // new hero spin attack anim
+        this.anims.create({
+            key: 'spin',
+            frameRate: 24,
+            repeat: 0,  // how many extra times to play
+            frames: this.anims.generateFrameNumbers('hero', {
+                // if not contiguous, pass object with frames: array
+                frames: [16, 16, 16, 17, 18, 24, 25, 26, 21, 22, 30, 29, 28, 18, 19, 19, 19]
+            })
+        });
+
         // proceed once loading completes
         this.scene.start('playScene')
     }

@@ -10,7 +10,7 @@ const config = {
     width: 400,
     height: 300,
     pixelArt: true,
-    zoom: 2,
+    zoom: 2,    // basically scales up canvas
     physics: {
         default: "arcade",
         arcade: {

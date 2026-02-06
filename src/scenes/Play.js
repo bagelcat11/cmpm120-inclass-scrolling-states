@@ -5,13 +5,19 @@ class Play extends Phaser.Scene {
 
     create() {
         // add background image
-
+        this.map = this.add.image(0, 0, 'map').setOrigin(0);
 
         // add new Hero to scene (scene, x, y, key, frame, direction)
         this.hero = new Hero(this, 200, 150, 'hero', 0, 'down')
+        // this.hero.anims.play('spin');
 
         // set up camera
-        
+        // prevent from scrolling outside map
+        this.cameras.main.setBounds(0, 0, this.map.width, this.map.height);
+        // have camera follow player
+        this.cameras.main.startFollow(this.hero, true, 0.5, 0.5);
+        // expand physics world bounds beyond initial camera position
+        this.physics.world.setBounds(0, 0, this.map.width, this.map.height);
 
         // setup keyboard input
         this.keys = this.input.keyboard.createCursorKeys()

@@ -21,6 +21,7 @@ class Hero extends Phaser.Physics.Arcade.Sprite {
             swing: new SwingState(),
             dash: new DashState(),
             hurt: new HurtState(),
+            spin: new SpinState(),
         }, [scene, this])   // pass these as arguments to maintain scene/object context in the FSM
     }
 }
@@ -37,6 +38,7 @@ class IdleState extends State {
         // use destructuring to make a local copy of the keyboard object
         const { left, right, up, down, space, shift } = scene.keys
         const HKey = scene.keys.HKey
+        const FKey = scene.keys.FKey
 
         // transition to swing if pressing space
         if(Phaser.Input.Keyboard.JustDown(space)) {
@@ -54,6 +56,12 @@ class IdleState extends State {
         if(Phaser.Input.Keyboard.JustDown(HKey)) {
             this.stateMachine.transition('hurt')
             return
+        }
+
+        // spin attack if F input
+        if (Phaser.Input.Keyboard.JustDown(FKey)) {
+            this.stateMachine.transition('spin');
+            return;
         }
 
         // transition to move if pressing a movement key
@@ -69,6 +77,7 @@ class MoveState extends State {
         // use destructuring to make a local copy of the keyboard object
         const { left, right, up, down, space, shift } = scene.keys
         const HKey = scene.keys.HKey
+        const FKey = scene.keys.FKey
 
         // transition to swing if pressing space
         if(Phaser.Input.Keyboard.JustDown(space)) {
@@ -86,6 +95,12 @@ class MoveState extends State {
         if(Phaser.Input.Keyboard.JustDown(HKey)) {
             this.stateMachine.transition('hurt')
             return
+        }
+
+        // spin attack if F input
+        if (Phaser.Input.Keyboard.JustDown(FKey)) {
+            this.stateMachine.transition('spin');
+            return;
         }
 
         // transition to idle if not pressing movement keys
@@ -183,4 +198,16 @@ class HurtState extends State {
             this.stateMachine.transition('idle')
         })
     }
+}
+
+class SpinState extends State {
+    enter(scene, hero) {
+        hero.setVelocity(0);
+        // chain .once() to immediately define callback
+        hero.anims.play('spin').once('animationcomplete', () => {
+            this.stateMachine.transition('idle');
+        });
+    }
+
+    // no execute() needed
 }
